@@ -10,7 +10,7 @@ git config --global color.ui true
 
 cd /build
 
-repo init -u https://github.com/flashbots/yocto-manifests.git -b main -m tdx-base.xml
+repo init -u https://github.com/entropyxyz/yocto-build.git -b main -m tdx-base.xml
 repo sync
 
 source setup || true
