@@ -8,6 +8,7 @@ git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 git config --global color.ui true
 
+mkdir -p /build
 cd /build
 
 repo init -u https://github.com/entropyxyz/yocto-build.git -b main -m tdx-base.xml
