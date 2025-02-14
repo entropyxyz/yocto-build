@@ -19,16 +19,9 @@ jobs:
       with:
         version: latest
 
-    - name: Build Docker image
+    - name: Build
       run: |
-        docker build -t yocto-builder:base --build-arg MANIFEST=tdx-base.xml ./reproducible-build
-
-    - name: Run Docker container
-      run: |
-        mkdir -p artifacts-base
-        docker run --rm --env-file yocto-build-config.env \
-          -v artifacts-base:/home/pokyuser/artifacts \
-          yocto-builder:base
+        make image-base
 
     # This could be replaced with `gcloud storage cp`
     - name: Upload build artifacts
