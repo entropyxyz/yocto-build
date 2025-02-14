@@ -6,6 +6,9 @@ on:
     branches:
       - peg/github-action
 
+env:
+  ARTIFACTS_DIR: reproducible-build/artifacts
+
 jobs:
   build:
     runs-on: core-build-runner
@@ -23,9 +26,9 @@ jobs:
       run: |
         make image-base
 
-    # This could be replaced with `gcloud storage cp`
+    # This could be replaced with `google-github-actions/upload-cloud-storage`
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: images
-        path: artifacts-base
+        path: ${ARTIFACTS_DIR}
