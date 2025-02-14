@@ -26,5 +26,4 @@ jobs:
     - name: Run Docker container
       run: |
         docker run --rm --env-file yocto-build-config.env \
-          -v reproducible-build/artifacts-base:/artifacts \
           yocto-builder:base
