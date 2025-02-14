@@ -29,8 +29,9 @@ verbose_output "Sourced the oe-init-build-env script"
 
 # Add additional layers to bblayers.conf
 bitbake-layers add-layer ../meta-confidential-compute
+bitbake-layers add-layer ../meta-entropy-tss
 
-verbose_output "Added the meta-confidential-compute layer to bblayers.conf"
+verbose_output "Added additional layers to bblayers.conf"
 
 # Return to the original directory
 popd

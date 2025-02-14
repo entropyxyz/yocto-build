@@ -22,5 +22,4 @@
   <!-- <project remote="flashbots"       revision="main"             name="meta-evm"                        path="srcs/poky/meta-evm"/> -->
   <!-- <project remote="flashbots"       revision="master"           name="meta-rust-bin"                   path="srcs/poky/meta-rust-bin"/> -->
   <!-- <project remote="flashbots"       revision="main"             name="meta-observability"              path="srcs/poky/meta-observability"/> -->
-  <!-- <project remote="flashbots"       revision="main"             name="meta-custom-podman"              path="srcs/poky/meta-custom-podman"/> -->
 </manifest>
