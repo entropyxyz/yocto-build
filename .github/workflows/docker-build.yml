@@ -1,5 +1,5 @@
-name: Build and Run Docker Image
-run-name: Build and release (started by @${{ github.triggering_actor }})
+name: Build CVM Image
+run-name: Build CVM Image (started by @${{ github.triggering_actor }})
 
 on:
   push:
