@@ -21,10 +21,10 @@ jobs:
 
     - name: Build Docker image
       run: |
-	docker build -t yocto-builder:base --build-arg MANIFEST=tdx-base.xml ./reproducible-build
+        docker build -t yocto-builder:base --build-arg MANIFEST=tdx-base.xml ./reproducible-build
 
     - name: Run Docker container
       run: |
-	docker run --rm --env-file yocto-build-config.env \
-		-v reproducible-build/artifacts-base:/artifacts \
-		yocto-builder:base
+        docker run --rm --env-file yocto-build-config.env \
+          -v reproducible-build/artifacts-base:/artifacts \
+          yocto-builder:base
