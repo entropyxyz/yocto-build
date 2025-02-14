@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: core-build-runner
 
     steps:
     - name: Check out the repository
@@ -25,5 +25,14 @@ jobs:
 
     - name: Run Docker container
       run: |
+        mkdir -p artifacts-base
         docker run --rm --env-file yocto-build-config.env \
+          -v artifacts-base:/home/pokyuser/artifacts \
           yocto-builder:base
+
+    # This could be replaced with `gcloud storage cp`
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: images
+        path: artifacts-base
