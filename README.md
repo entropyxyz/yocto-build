@@ -1,6 +1,8 @@
 
 Yocto build for confidential virtual machine images running `entropy-tss` based on [flashbots/yocto-manifests](https://github.com/flashbots/yocto-manifests).
 
+This uses the [meta-entropy-tss](https://github.com/entropyxyz/meta-entropy-tss) layer which has the recipe for adding [`entropy-tss`](https://github.com/entropyxyz/entropy-core/tree/master/crates/threshold-signature-server).
+
 ## To build with docker:
 
 - Ensure docker and GNU make are installed, and that docker is running
