@@ -4,10 +4,9 @@ run-name: Build CVM Image (started by @${{ github.triggering_actor }})
 on:
   push:
     branches:
-      - peg/github-action
-
+      - main
 env:
-  ARTIFACTS_DIR: reproducible-build/artifacts
+  ARTIFACTS_DIR: reproducible-build/artifacts-base
 
 jobs:
   build:
