@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# Script to deploy a cvm image build with this repo to Google Cloud Platform
+#
+# This assumes it is run from the root directory of this repository after successfully creating a
+# build with docker, and that the following firewall rule is already set up:
+#
+# gcloud compute firewall-rules create allow-port-3001 \
+#   --allow tcp:3001 \
+#   --target-tags entropy-tss \
+#   --description "Allow traffic on port 3001" \
+#   --direction INGRESS \
+#   --priority 1000 \
+#   --network default
+
+if [ -z "$1" ]; then
+    echo "First argument should be a name for the image and instance which will be prefixed with `core-image-minimal-tdx-gcp-`"
+    exit 1
+fi
+
+NAME=core-image-minimal-tdx-gcp-${1}
+echo "Using image / instance name $NAME"
+
+echo "Uploading image to bucket..."
+gcloud storage cp ./reproducible-build/artifacts-base/core-image-minimal-tdx-gcp.rootfs.wic.tar.gz gs://cvm-images-flashbots || exit 1
+
+echo "Creating GCP image from image file..."
+gcloud compute images create $NAME --source-uri gs://cvm-images-flashbots/core-image-minimal-tdx-gcp.rootfs.wic.tar.gz --guest-os-features=UEFI_COMPATIBLE,VIRTIO_SCSI_MULTIQUEUE,GVNIC,TDX_CAPABLE || exit 1
+
+echo "Creating GCP instance using image"
+gcloud compute instances create $NAME --network=default --confidential-compute-type=TDX --machine-type=c3-standard-4 --maintenance-policy=TERMINATE --image $NAME --zone=europe-west4-b --metadata serial-port-enable=TRUE --tags entropy-tss
