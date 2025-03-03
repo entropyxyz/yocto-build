@@ -17,6 +17,7 @@ mkdir entropy-tss-image-build && cd entropy-tss-image-build
 repo init -u https://github.com/entropyxyz/yocto-build.git -b main -m tdx-base.xml
 repo sync
 source setup
+cd ../..
 DEBUG_TWEAKS_ENABLED=1 make build
 ```
 
