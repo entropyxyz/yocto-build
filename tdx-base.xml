@@ -14,5 +14,5 @@
   <project remote="flashbots"       revision="scarthgap"        name="meta-openembedded"               path="srcs/poky/meta-openembedded"/>
   <project remote="flashbots"       revision="v3"               name="meta-confidential-compute"       path="srcs/poky/meta-confidential-compute"/>
 
-  <project remote="entropyxyz"       revision="main"               name="meta-entropy-tss"       path="srcs/poky/meta-entropy-tss"/>
+  <project remote="entropyxyz"       revision="peg/kernel-dma-fix"               name="meta-entropy-tss"       path="srcs/poky/meta-entropy-tss"/>
 </manifest>
