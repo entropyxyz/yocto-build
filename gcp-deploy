@@ -21,8 +21,12 @@ fi
 NAME=core-image-minimal-tdx-gcp-${1}
 echo "Using image / instance name $NAME"
 
+# The second argument, if given, is the image file to use
+IMAGE_FILE="${2:-"./reproducible-build/artifacts-base/core-image-minimal-tdx-gcp.rootfs.wic.tar.gz"}"
+echo "Using image file $IMAGE_FILE"
+
 echo "Uploading image to bucket..."
-gcloud storage cp ./reproducible-build/artifacts-base/core-image-minimal-tdx-gcp.rootfs.wic.tar.gz gs://cvm-images-flashbots || exit 1
+gcloud storage cp $IMAGE_FILE gs://cvm-images-flashbots || exit 1
 
 echo "Creating GCP image from image file..."
 gcloud compute images create $NAME --source-uri gs://cvm-images-flashbots/core-image-minimal-tdx-gcp.rootfs.wic.tar.gz --guest-os-features=UEFI_COMPATIBLE,VIRTIO_SCSI_MULTIQUEUE,GVNIC,TDX_CAPABLE || exit 1
