@@ -14,23 +14,25 @@ cd /build
 repo init -u https://github.com/entropyxyz/yocto-build.git -b ${REVISION} -m tdx-base.xml
 repo sync
 
-# Download entropy-tss binary
-if [[ -n "$GITHUB_TOKEN" ]]; then
-    echo "Github token provided - assuming that the binary is coming from the CI release pipeline"
-    wget --header='Authorization: token $GITHUB_TOKEN' -O entropy-tss.zip $ENTROPY_TSS_BINARY_URI
-    # unzip and get amd64 version
-    unzip entropy-tss.zip
-    BINARY_FILENAME=$(find . -type f -name '*_amd64' | head -n 1)
+# Download entropy-tss BINARY_FILENAME
+if echo $ENTROPY_TSS_BINARY_URI | grep -q 'github.com'; then
+    # If its coming from github include our github token
+    wget --header='Authorization: token $GITHUB_TOKEN' -O entropy-tss $ENTROPY_TSS_BINARY_URI
 
-    if [[ -n "$BINARY_FILENAME" ]]; then
-	echo "Renamed $file to new_filename"
-	mv "$BINARY_FILENAME" entropy-tss
-    else
-	echo "No file ending with _amd64 found in archive"
-	exit 1
+    # If its a zip file (from upload-artifact) unzip and get amd64 version
+    if file "$file" | grep -q -i 'zip'; then
+	unzip entropy-tss
+	BINARY_FILENAME=$(find . -type f -name '*_amd64' | head -n 1)
+
+	if [[ -n "$BINARY_FILENAME" ]]; then
+	    echo "Renamed $file to new_filename"
+	    mv "$BINARY_FILENAME" entropy-tss
+	else
+	    echo "No file ending with _amd64 found in archive"
+	    exit 1
+	fi
     fi
 else
-    echo "Github token not provided - assuming that the binary is provided raw (not in a zip archive)"
     wget -O entropy-tss $ENTROPY_TSS_BINARY_URI
 fi
 
