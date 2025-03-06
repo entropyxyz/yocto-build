@@ -15,6 +15,7 @@ image-base: prepare-dirs ### Build a TDX general purpose base image, by default 
 		--build-arg MANIFEST=tdx-base.xml \
 		--build-arg REVISION=$(REVISION) \
 		--build-arg ENTROPY_TSS_BINARY_URI=$(ENTROPY_TSS_BINARY_URI) \
+		--build-arg GITHUB_TOKEN=$(GITHUB_TOKEN) \
 		$(REPRODUCIBLE_BUILD_DIR)
 	$(DOCKER) run --rm --env-file yocto-build-config.env \
 		-v $(REPRODUCIBLE_BUILD_DIR)/artifacts-base:/artifacts \
