@@ -15,20 +15,34 @@ repo init -u https://github.com/entropyxyz/yocto-build.git -b ${REVISION} -m tdx
 repo sync
 
 # Download entropy-tss binary
-# TODO --header='Authorization: token $GITHUB_TOKEN'
-wget -O entropy-tss $ENTROPY_TSS_BINARY_URI
+if [[ -n "$GITHUB_TOKEN" ]]; then
+    echo "Github token provided - assuming that the binary is coming from the CI release pipeline"
+    wget --header='Authorization: token $GITHUB_TOKEN' -O entropy-tss.zip $ENTROPY_TSS_BINARY_URI
+    # unzip and get amd64 version
+    unzip entropy-tss.zip
+    BINARY_FILENAME=$(find . -type f -name '*_amd64' | head -n 1)
 
-# TODO unzip and get amd64 version
+    if [[ -n "$BINARY_FILENAME" ]]; then
+	echo "Renamed $file to new_filename"
+	mv "$BINARY_FILENAME" entropy-tss
+    else
+	echo "No file ending with _amd64 found in archive"
+	exit 1
+    fi
+else
+    echo "Github token not provided - assuming that the binary is provided raw (not in a zip archive)"
+    wget -O entropy-tss $ENTROPY_TSS_BINARY_URI
+fi
 
-# TODO sha256sum entropy-tss
-# then append `SRC_URI[sha256sum] = "$SHA256SUM"` to srcs/poky/meta-entropy-tss/recipes-core/entropy-tss/entropy-tss.bb
-#
+# Include the hash of entropy-tss in the bitbake recipe
+ENTROPY_TSS_SHA256=$(sha256sum entropy-tss | awk '{print $1}')
+echo 'SRC_URI[sha256sum] = "$SHA256SUM"' >> srcs/poky/meta-entropy-tss/recipes-core/entropy-tss/entropy-tss.bb
+
 # Set executable permissions
 chmod a+x entropy-tss
 
 # Move file to binary location directory
 mv entropy-tss srcs/poky/meta-entropy-tss/recipes-core/entropy-tss/.
-
 
 source setup || true
 

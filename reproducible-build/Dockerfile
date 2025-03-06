@@ -15,4 +15,9 @@ ENV REVISION=${REVISION}
 ARG ENTROPY_TSS_BINARY_URI
 ENV ENTROPY_TSS_BINARY_URI=${ENTROPY_TSS_BINARY_URI}
 
+# This is used for downloading the binary from the entropy-core release pipeline
+# It is not needed if the binary source can be downloaded without an authorization token
+ARG GITHUB_TOKEN
+ENV GITHUB_TOKEN=${GITHUB_TOKEN}
+
 CMD /usr/bin/build
