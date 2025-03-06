@@ -14,6 +14,8 @@ cd /build
 repo init -u https://github.com/entropyxyz/yocto-build.git -b ${REVISION} -m tdx-base.xml
 repo sync
 
+source setup || true
+
 # Download entropy-tss BINARY_FILENAME
 if echo $ENTROPY_TSS_BINARY_URI | grep -q 'github.com'; then
     # If its coming from github include our github token
@@ -45,8 +47,6 @@ chmod a+x entropy-tss
 
 # Move file to binary location directory
 mv entropy-tss srcs/poky/meta-entropy-tss/recipes-core/entropy-tss/.
-
-source setup || true
 
 make build || true
 
