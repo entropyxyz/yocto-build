@@ -14,7 +14,6 @@
   <project remote="flashbots"       revision="scarthgap"        name="poky"                            path="srcs/poky"/>
   <project remote="flashbots"       revision="scarthgap"        name="meta-openembedded"               path="srcs/poky/meta-openembedded"/>
   <project remote="flashbots"       revision="v3"               name="meta-confidential-compute"       path="srcs/poky/meta-confidential-compute"/>
-  <project remote="flashbots"       revision="061d78b05f2afb995d2d8f0cf7f403b14f89c92a"        name="meta-rust-bin"                   path="srcs/poky/meta-rust-bin"/>
-  <!-- <project remote="rust-embedded"   revision="85a33ed0725c8e88f8e103c347d207c602f8b86e"        name="meta-rust-bin"                   path="srcs/poky/meta-rust-bin"/> -->
-  <project remote="entropyxyz"       revision="peg/build-rust-with-meta-rust-bin"               name="meta-entropy-tss"       path="srcs/poky/meta-entropy-tss"/>
+  <project remote="rust-embedded"   revision="85a33ed0725c8e88f8e103c347d207c602f8b86e"        name="meta-rust-bin"                   path="srcs/poky/meta-rust-bin"/>
+  <project remote="entropyxyz"       revision="main"               name="meta-entropy-tss"       path="srcs/poky/meta-entropy-tss"/>
 </manifest>
