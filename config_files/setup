@@ -28,8 +28,10 @@ source oe-init-build-env
 verbose_output "Sourced the oe-init-build-env script"
 
 # Add additional layers to bblayers.conf
+# bitbake-layers add-layer ../meta-openembedded/meta-oe
 bitbake-layers add-layer ../meta-confidential-compute
 bitbake-layers add-layer ../meta-entropy-tss
+bitbake-layers add-layer ../meta-rust-bin
 
 verbose_output "Added additional layers to bblayers.conf"
 
