@@ -1,0 +1,55 @@
+name: Build CVM Image
+run-name: Build CVM Image (started by @${{ github.triggering_actor }})
+
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    runs-on: core-build-runner
+    timeout-minutes: 90
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      with:
+        version: latest
+
+    - name: Build
+      run: |
+        make image-base
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: images
+        path: /home/runner/work/yocto-build/yocto-build/reproducible-build/artifacts-base
+
+  release:
+    needs: build
+    if: |
+      github.ref_name matches 'release/v[0-9]+.[0-9]+.[0-9]+-?**' ||  # Release, or pre-release build.
+      github.ref_name matches 'release/v[0-9]+.[0-9]+.[0-9]+\+?**' || # Release with build identifier.
+      github.ref_name matches 'test/**release/**'' # Test release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: core-image-minimal-tdx-gcp.rootfs.wic.tar.gz
+          path: .
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: core-image-minimal-tdx-gcp.rootfs.wic.tar.gz
+          token: ${{ secrets.GITHUB_TOKEN }}
