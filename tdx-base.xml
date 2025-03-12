@@ -2,6 +2,7 @@
 <manifest>
   <remote name="flashbots"  fetch="https://github.com/flashbots"/>
   <remote name="entropyxyz"  fetch="https://github.com/entropyxyz"/>
+  <remote name="rust-embedded"  fetch="https://github.com/rust-embedded"/>
 
   <default sync-j="4"/>
 
@@ -14,6 +15,6 @@
   <project remote="flashbots"       revision="scarthgap"        name="meta-openembedded"               path="srcs/poky/meta-openembedded"/>
   <project remote="flashbots"       revision="v3"               name="meta-confidential-compute"       path="srcs/poky/meta-confidential-compute"/>
 
-  <project remote="entropyxyz"       revision="peg/persistent-fs"               name="meta-entropy-tss"       path="srcs/poky/meta-entropy-tss"/>
-
+  <project remote="rust-embedded"   revision="85a33ed0725c8e88f8e103c347d207c602f8b86e"        name="meta-rust-bin"                   path="srcs/poky/meta-rust-bin"/>
+  <project remote="entropyxyz"      revision="peg/persistent-fs"               name="meta-entropy-tss"       path="srcs/poky/meta-entropy-tss"/>
 </manifest>

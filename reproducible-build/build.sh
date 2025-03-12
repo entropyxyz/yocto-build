@@ -15,6 +15,6 @@ repo sync
 
 source setup || true
 
-make build || true
+make build
 
 cp --dereference /build/srcs/poky/build/tmp/deploy/images/tdx-gcp/* /artifacts/.

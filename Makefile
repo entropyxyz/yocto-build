@@ -11,7 +11,11 @@ help: ## Display this help.
 
 .PHONY: image-base
 image-base: prepare-dirs ### Build a TDX general purpose base image, by default outputs to reproducile-build/artifacts-base
-	$(DOCKER) build -t yocto-builder:base --build-arg MANIFEST=tdx-base.xml --build-arg REVISION=$(REVISION) $(REPRODUCIBLE_BUILD_DIR)
+	$(DOCKER) build -t yocto-builder:base \
+		--build-arg MANIFEST=tdx-base.xml \
+		--build-arg REVISION=$(REVISION) \
+		--build-arg ENTROPY_TSS_BINARY_URI=$(ENTROPY_TSS_BINARY_URI) \
+		$(REPRODUCIBLE_BUILD_DIR)
 	$(DOCKER) run --rm --env-file yocto-build-config.env \
 		-v $(REPRODUCIBLE_BUILD_DIR)/artifacts-base:/artifacts \
 		-v $(BASE_BUILD_DIR)/base:/build \

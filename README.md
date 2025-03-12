@@ -17,10 +17,15 @@ mkdir entropy-tss-image-build && cd entropy-tss-image-build
 repo init -u https://github.com/entropyxyz/yocto-build.git -b main -m tdx-base.xml
 repo sync
 source setup
+cd ../..
 DEBUG_TWEAKS_ENABLED=1 make build
 ```
 
 ## To deploy to Google Cloud Platform:
+
+There is a script included to do this: [./gcp-deploy](./gcp-deploy) which expects the first argument to be a name identifying the build, which is added as a suffix to the VM instance, and the second argument, which is optional, to be the path to the image file (defaults to an image built with this repo, assuming you run the script from the root of the repo).
+
+Here is an explanation of what the script does:
 
 ### Copy the build image to a GCP bucket:
 
