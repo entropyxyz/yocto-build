@@ -32,10 +32,7 @@ jobs:
 
   release:
     needs: build
-    if: |
-      github.ref_name matches 'release/v[0-9]+.[0-9]+.[0-9]+-?**' ||  # Release, or pre-release build.
-      github.ref_name matches 'release/v[0-9]+.[0-9]+.[0-9]+\+?**' || # Release with build identifier.
-      github.ref_name matches 'test/**release/**'' # Test release
+    if: ${{ contains(github.ref_name, 'release') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
