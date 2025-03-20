@@ -5,6 +5,12 @@ on:
   push:
     branches:
       - "*"
+    tags:
+      # First, match SemVer.org conformant tags in the `release/` tagspace.
+      - release/v[0-9]+.[0-9]+.[0-9]+-?**  # Release, or pre-release build.
+      - release/v[0-9]+.[0-9]+.[0-9]+\+?** # Release with build identifier.
+      # Then, also, basically any release-ish name in the `test/` tagspace.
+      - test/**release/**
 
 jobs:
   build:
