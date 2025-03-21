@@ -47,8 +47,10 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: core-image-minimal-tdx-gcp.rootfs.wic.tar.gz
           path: .
+
+      - name: List downloaded files
+        run: ls -la
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
