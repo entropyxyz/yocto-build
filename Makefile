@@ -9,12 +9,26 @@ REVISION?=$(shell git rev-parse HEAD)
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "Usage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-.PHONY: image-base
-image-base: prepare-dirs ### Build a TDX general purpose base image, by default outputs to reproducile-build/artifacts-base
+.PHONY: image-entropy-tss
+image-entropy-tss: prepare-dirs ### Build a TDX general purpose base image, by default outputs to reproducile-build/artifacts-base
 	$(DOCKER) build -t yocto-builder:base \
+		--build-arg CVM_SERVICE_NAME=entropy-tss \
 		--build-arg MANIFEST=tdx-base.xml \
 		--build-arg REVISION=$(REVISION) \
 		--build-arg ENTROPY_TSS_BINARY_URI=$(ENTROPY_TSS_BINARY_URI) \
+		$(REPRODUCIBLE_BUILD_DIR)
+	$(DOCKER) run --rm --env-file yocto-build-config.env \
+		-v $(REPRODUCIBLE_BUILD_DIR)/artifacts-base:/artifacts \
+		-v $(BASE_BUILD_DIR)/base:/build \
+		yocto-builder:base
+	chmod 0755 $(BASE_BUILD_DIR)/base $(REPRODUCIBLE_BUILD_DIR)/artifacts-base
+
+.PHONY: image-api_key_tdx
+image-api_key_tdx: prepare-dirs ### Build a TDX general purpose base image, by default outputs to reproducile-build/artifacts-base
+	$(DOCKER) build -t yocto-builder:base \
+		--build-arg CVM_SERVICE_NAME=api_key_tdx \
+		--build-arg MANIFEST=tdx-base.xml \
+		--build-arg REVISION=$(REVISION) \
 		$(REPRODUCIBLE_BUILD_DIR)
 	$(DOCKER) run --rm --env-file yocto-build-config.env \
 		-v $(REPRODUCIBLE_BUILD_DIR)/artifacts-base:/artifacts \
