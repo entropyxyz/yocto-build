@@ -26,9 +26,13 @@ jobs:
       with:
         version: latest
 
-    - name: Build
+    - name: Build CVM image - with the service name given in the tag or branch name
       run: |
-        make image-base
+          if [[ "${GITHUB_REF_NAME}" == *api_key_tdx* ]]; then
+            make image-base CVM_SERVICE_NAME=api_key_tdx
+          else
+            make image-base CVM_SERVICE_NAME=entropy-tss
+          fi
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
