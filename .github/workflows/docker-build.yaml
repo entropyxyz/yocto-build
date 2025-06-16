@@ -13,7 +13,7 @@ on:
       - test/**release/**
 
 jobs:
-   get-latest-src-release-details:
+  get-latest-src-release-details:
     runs-on: ubuntu-latest
     outputs:
       commit_hash: ${{ steps.extract.outputs.commit_hash }}
