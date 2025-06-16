@@ -14,7 +14,8 @@ image-base: prepare-dirs ### Build a TDX general purpose base image, by default 
 	$(DOCKER) build -t yocto-builder:base \
 		--build-arg MANIFEST=tdx-base.xml \
 		--build-arg REVISION=$(REVISION) \
-		--build-arg ENTROPY_TSS_BINARY_URI=$(ENTROPY_TSS_BINARY_URI) \
+		--build-arg CVM_SERVICE_SRC_REV=$(CVM_SERVICE_SRC_REV) \
+		--build-arg CVM_SERVICE_SRC_BRANCH=$(CVM_SERVICE_SRC_BRANCH) \
 		$(REPRODUCIBLE_BUILD_DIR)
 	$(DOCKER) run --rm --env-file yocto-build-config.env \
 		-v $(REPRODUCIBLE_BUILD_DIR)/artifacts-base:/artifacts \

@@ -3,10 +3,22 @@ Yocto build for confidential virtual machine images running `entropy-tss` based 
 
 This uses the [meta-entropy-tss](https://github.com/entropyxyz/meta-entropy-tss) layer which has the recipe for adding [`entropy-tss`](https://github.com/entropyxyz/entropy-core/tree/master/crates/threshold-signature-server).
 
+# Usage
+
+You need to know the commit hash and branch name of the entopy-tss source you want to build from.
+
+For example, to get the commit hash of the latest release: 
+
+```bash
+cd ../entropy-core 
+commit_hash=$(git rev-list -n 1 --tags='release*' --date-order)
+cd -
+```
+
 ## To build with docker:
 
 - Ensure docker and GNU make are installed, and that docker is running
-- `make image-base` 
+- `make image-base CVM_SERVICE_SRC_REV=$commit_hash CVM_SERVICE_SRC_BRANCH=master` 
 
 ## To build without docker:
 
@@ -18,7 +30,7 @@ repo init -u https://github.com/entropyxyz/yocto-build.git -b main -m tdx-base.x
 repo sync
 source setup
 cd ../..
-DEBUG_TWEAKS_ENABLED=1 make build
+DEBUG_TWEAKS_ENABLED=1 make image-base CVM_SERVICE_SRC_REV=$commit_hash CVM_SERVICE_SRC_BRANCH=master
 ```
 
 ## To deploy to Google Cloud Platform:

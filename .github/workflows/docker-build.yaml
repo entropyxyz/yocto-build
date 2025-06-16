@@ -13,8 +13,33 @@ on:
       - test/**release/**
 
 jobs:
+  get-latest-src-release-details:
+    runs-on: ubuntu-latest
+    outputs:
+      commit_hash: ${{ steps.extract.outputs.commit_hash }}
+      branch_name: ${{ steps.extract.outputs.branch_name }}
+    steps:
+      - name: Checkout entropy-core
+        uses: actions/checkout@v4
+        with:
+          repository: 'entropyxyz/entropy-core'
+          fetch-depth: 0
+
+      - name: Get the branch name and commit hash of the latest release of entropy-core
+        id: extract
+        run: |
+          # Get commit hash of latest tagged release of entropy-core
+          commit_hash=$(git rev-list -n 1 --tags='release*' --date-order)
+          echo "commit_hash=$commit_hash" >> $GITHUB_OUTPUT
+          # Get all remote branches that contain the current commit
+          branches=$(git branch -r --contains $commit_hash)
+          branch_name=$(echo "$branches" | head -n 1 | sed 's|^[^/]*/||' | xargs)
+          echo "First matching branch name: $branch_name"
+          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+
   build:
     runs-on: core-build-runner
+    needs: get-latest-src-release-details
     timeout-minutes: 90
 
     steps:
@@ -28,7 +53,7 @@ jobs:
 
     - name: Build
       run: |
-        make image-base
+        make image-base CVM_SERVICE_SRC_REV=${{ needs.get-latest-src-release-details.outputs.commit_hash }} CVM_SERVICE_SRC_BRANCH=${{ needs.get-latest-src-release-details.outputs.branch_name }}
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
