@@ -54,7 +54,7 @@ jobs:
     - name: Build
       run: |
         make image-base \
-          CVM_SERVICE_SRC_REV=${{ needs.get-latest-src-release-details.outputs/commit_hash }} \
+          CVM_SERVICE_SRC_REV=${{ needs.get-latest-src-release-details.outputs.commit_hash }} \
           CVM_SERVICE_SRC_BRANCH=${{ needs.get-latest-src-release-details.outputs.branch_name }}
 
     - name: Upload build artifacts
