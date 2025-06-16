@@ -19,13 +19,13 @@ jobs:
       commit_hash: ${{ steps.extract.outputs.commit_hash }}
       branch_name: ${{ steps.extract.outputs.branch_name }}
     steps:
-      - name: Checkout code
+      - name: Checkout entropy-core
         uses: actions/checkout@v4
         with:
           repository: 'entropyxyz/entropy-core'
           fetch-depth: 0
 
-      - name: Get the name of a branch which contains the current commit
+      - name: Get the branch name and commit hash of the latest release of entropy-core
         id: extract
         run: |
           # Get commit hash of latest tagged release of entropy-core
