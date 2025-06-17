@@ -5,6 +5,9 @@ BASE_BUILD_DIR := $(CURDIR)/build
 REPRODUCIBLE_BUILD_DIR := $(CURDIR)/reproducible-build
 REVISION?=$(shell git rev-parse HEAD)
 
+# Which service to build - either entropy-tss or api_key_tdx
+CVM_SERVICE_NAME ?= entropy-tss
+
 .PHONY: help
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "Usage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
@@ -12,10 +15,11 @@ help: ## Display this help.
 .PHONY: image-base
 image-base: prepare-dirs ### Build a TDX general purpose base image, by default outputs to reproducile-build/artifacts-base
 	$(DOCKER) build -t yocto-builder:base \
-		--build-arg MANIFEST=tdx-base.xml \
-		--build-arg REVISION=$(REVISION) \
+		--build-arg CVM_SERVICE_NAME=$(CVM_SERVICE_NAME) \
 		--build-arg CVM_SERVICE_SRC_REV=$(CVM_SERVICE_SRC_REV) \
 		--build-arg CVM_SERVICE_SRC_BRANCH=$(CVM_SERVICE_SRC_BRANCH) \
+		--build-arg MANIFEST=tdx-base.xml \
+		--build-arg REVISION=$(REVISION) \
 		$(REPRODUCIBLE_BUILD_DIR)
 	$(DOCKER) run --rm --env-file yocto-build-config.env \
 		-v $(REPRODUCIBLE_BUILD_DIR)/artifacts-base:/artifacts \

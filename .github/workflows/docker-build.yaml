@@ -51,9 +51,14 @@ jobs:
       with:
         version: latest
 
-    - name: Build
+    - name: Build CVM image - with the service name given in the tag or branch name
       run: |
-        make image-base CVM_SERVICE_SRC_REV=${{ needs.get-latest-src-release-details.outputs.commit_hash }} CVM_SERVICE_SRC_BRANCH=${{ needs.get-latest-src-release-details.outputs.branch_name }}
+        if [[ "${GITHUB_REF_NAME}" == *api_key_tdx* ]]; then
+          CVM_SERVICE_NAME=api_key_tdx
+        else
+          CVM_SERVICE_NAME=entropy-tss
+        fi
+        make image-base CVM_SERVICE_NAME=$CVM_SERVICE_NAME CVM_SERVICE_SRC_REV=${{ needs.get-latest-src-release-details.outputs.commit_hash }} CVM_SERVICE_SRC_BRANCH=${{ needs.get-latest-src-release-details.outputs.branch_name }}
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
