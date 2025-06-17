@@ -16,6 +16,8 @@ help: ## Display this help.
 image-base: prepare-dirs ### Build a TDX general purpose base image, by default outputs to reproducile-build/artifacts-base
 	$(DOCKER) build -t yocto-builder:base \
 		--build-arg CVM_SERVICE_NAME=$(CVM_SERVICE_NAME) \
+		--build-arg CVM_SERVICE_SRC_REV=$(CVM_SERVICE_SRC_REV) \
+		--build-arg CVM_SERVICE_SRC_BRANCH=$(CVM_SERVICE_SRC_BRANCH) \
 		--build-arg MANIFEST=tdx-base.xml \
 		--build-arg REVISION=$(REVISION) \
 		$(REPRODUCIBLE_BUILD_DIR)
