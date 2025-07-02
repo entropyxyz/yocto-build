@@ -18,6 +18,13 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+if [ -z "$2" ]; then
+    echo "Second argument should be the chain endpoint eg: ws://my-chain-endpoint:9944"
+    exit 1
+fi
+
+CHAIN_ENDPOINT=$2
+
 NAME=core-image-minimal-tdx-gcp-${1}
 echo "Using image / instance name $NAME"
 
@@ -32,4 +39,13 @@ echo "Creating GCP image from image file..."
 gcloud compute images create $NAME --source-uri gs://cvm-images-flashbots/core-image-minimal-tdx-gcp.rootfs.wic.tar.gz --guest-os-features=UEFI_COMPATIBLE,VIRTIO_SCSI_MULTIQUEUE,GVNIC,TDX_CAPABLE || exit 1
 
 echo "Creating GCP instance using image"
-gcloud compute instances create $NAME --network=default --confidential-compute-type=TDX --machine-type=c3-standard-4 --maintenance-policy=TERMINATE --image $NAME --zone=europe-west4-b --metadata serial-port-enable=TRUE --tags entropy-tss
+gcloud compute instances create $NAME \
+    --network=default \
+    --confidential-compute-type=TDX \
+    --machine-type=c3-standard-4 \
+    --maintenance-policy=TERMINATE \
+    --image $NAME \
+    --zone=europe-west4-b \
+    --metadata serial-port-enable=TRUE \
+    --metadata chain-endpoint=$CHAIN_ENDPOINT \
+    --tags entropy-tss
