@@ -28,8 +28,8 @@ CHAIN_ENDPOINT=$2
 NAME=core-image-minimal-tdx-gcp-${1}
 echo "Using image / instance name $NAME"
 
-# The second argument, if given, is the image file to use
-IMAGE_FILE="${2:-"./reproducible-build/artifacts-base/core-image-minimal-tdx-gcp.rootfs.wic.tar.gz"}"
+# The third argument, if given, is the image file to use
+IMAGE_FILE="${3:-"./reproducible-build/artifacts-base/core-image-minimal-tdx-gcp.rootfs.wic.tar.gz"}"
 echo "Using image file $IMAGE_FILE"
 
 echo "Uploading image to bucket..."
@@ -46,6 +46,5 @@ gcloud compute instances create $NAME \
     --maintenance-policy=TERMINATE \
     --image $NAME \
     --zone=europe-west4-b \
-    --metadata serial-port-enable=TRUE \
-    --metadata chain-endpoint=$CHAIN_ENDPOINT \
+    --metadata serial-port-enable=TRUE,chain-endpoint=$CHAIN_ENDPOINT \
     --tags entropy-tss
