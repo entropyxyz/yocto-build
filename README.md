@@ -67,5 +67,13 @@ $ gcloud compute firewall-rules create allow-port-3001 \
 ### Start a GCP instance using the image:
 
 ```
-gcloud compute instances create core-image-minimal-tdx-gcp-3 --network=default --confidential-compute-type=TDX --machine-type=c3-standard-4 --maintenance-policy=TERMINATE --image core-image-minimal-tdx-gcp-3 --zone=europe-west4-b --metadata serial-port-enable=TRUE --tags entropy-tss
+gcloud compute instances create core-image-minimal-tdx-gcp-3 \
+    --network=default \
+    --confidential-compute-type=TDX \
+    --machine-type=c3-standard-4 \
+    --maintenance-policy=TERMINATE \
+    --image core-image-minimal-tdx-gcp-3 \
+    --zone=europe-west4-b \
+    --metadata serial-port-enable=TRUE,chain-endpoint=ws://my-chain-endpoint:9944 \
+    --tags entropy-tss
 ```
